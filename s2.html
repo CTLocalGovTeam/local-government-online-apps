@@ -5,7 +5,7 @@
 <html class="no-js okIE" lang="en">
 <!--<![endif]-->
 <head>
-    <meta charset=utf-8>
+    <meta charset="utf-8">
     <!--
      | Version 10.1.2
      | Copyright 2012 Esri
@@ -31,47 +31,89 @@
     <meta http-equiv="Expires" content="-1">
     <![endif]-->
     <link rel="dns-prefetch" href="http://serverapi.arcgisonline.com" />
-
     <title>Local Government online app</title>
     <meta name="description" content="Local Government online app">
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css"/>
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
     <link rel="apple-touch-icon-precomposed" href="images/onlineapp.png" />
     <style>
-        html, body {
-            height:100%;
-            font-size:100%;
-            font-family:sans-serif;
+        html, body
+        {
+            height: 100%;
+            font-size: 100%;
+            font-family: sans-serif;
+            overflow:hidden;
         }
-        .fill {
-            margin:0;
-            padding:0;
-            width:100%;
-            height:100%;
+        .fill
+        {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
         }
-        .startupBkgd {
-            background-image:url("images/loading.gif");
-            background-position:center;
-            background-repeat:no-repeat;
+        .startupBkgd
+        {
+            background-image: url("images/loading.gif");
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        .noJavaScriptMessage {
+        .noJavaScriptMessage
+        {
             margin: 80px;
             font-size: large;
         }
-        .transparent {
-            opacity:0.0;filter:Alpha(opacity=0);
+        .transparent
+        {
+            opacity: 0.0;
+            filter: Alpha(opacity=0);
         }
-        @media screen and (max-height:550px){.contentPane{max-height:300px}}
-        @media screen and (max-height:500px){.contentPane{max-height:250px}}
-        @media screen and (max-height:450px){.contentPane{max-height:200px}}
-        @media screen and (max-height:400px){.contentPane{max-height:150px}}
-        @media screen and (max-height:350px){.contentPane{max-height:100px}}
-        @media screen and (max-height:300px){.contentPane{max-height:50px}}
+        @media screen and (max-height:550px)
+        {
+            .contentPane
+            {
+                max-height: 300px;
+            }
+        }
+        @media screen and (max-height:500px)
+        {
+            .contentPane
+            {
+                max-height: 250px;
+            }
+        }
+        @media screen and (max-height:450px)
+        {
+            .contentPane
+            {
+                max-height: 200px;
+            }
+        }
+        @media screen and (max-height:400px)
+        {
+            .contentPane
+            {
+                max-height: 150px;
+            }
+        }
+        @media screen and (max-height:350px)
+        {
+            .contentPane
+            {
+                max-height: 100px;
+            }
+        }
+        @media screen and (max-height:300px)
+        {
+            .contentPane
+            {
+                max-height: 50px;
+            }
+        }
     </style>
-
 </head>
 <body id="pageBody" class="claro fill startupBkgd">
-    <div id="contentDiv" class="fill transparent"></div>
+    <div id="contentDiv" class="fill transparent">
+    </div>
     <noscript>
         <div class="noJavaScriptMessage">
             <span>This site requires JavaScript.</span>
