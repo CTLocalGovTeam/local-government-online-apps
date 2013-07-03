@@ -1,7 +1,8 @@
-/*global define,dojo,js,window,touchScroll,Modernizr,navigator,esri,alert,setTimeout,clearTimeout,input:true */
-/*jslint sloppy:true,white:true,nomen:true,vars:true,plusplus:true */
-/*
-| Copyright 2012 Esri
+/*global define,dojo,js,touchScroll,esri,alert,setTimeout */
+/*jslint sloppy:true */
+/** @license
+| Version 10.2
+| Copyright 2013 Esri
 |
 | Licensed under the Apache License, Version 2.0 (the "License");
 | you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
 | See the License for the specific language governing permissions and
 | limitations under the License.
 */
-define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo/dom-style", "dojo/dom-class", "dojo/_base/array", "esri/dijit/editing/TemplatePicker", "esri/dijit/editing/Editor", "dojo/dom-geometry", "dojo/_base/lang", "dojo/query", "dojo/string", "esri/geometry/Extent", "dojo/aspect", "js/lgonlineBase", "js/lgonlineMap"], function (domConstruct, dom, on, domStyle, domClass, array, TemplatePicker, Editor, domGeom, lang, query, string, Extent, aspect) {
+define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo/dom-style", "dojo/dom-class", "dojo/_base/array", "esri/dijit/editing/TemplatePicker", "esri/dijit/editing/Editor", "dojo/dom-geometry", "dojo/_base/lang", "dojo/query", "dojo/string", "esri/geometry/Extent", "esri/geometry/screenUtils", "dojo/topic", "dojo/aspect", "js/lgonlineBase", "js/lgonlineMap"], function (domConstruct, dom, on, domStyle, domClass, array, TemplatePicker, Editor, domGeom, lang, query, string, Extent, screenUtils, topic, aspect) {
 
     //========================================================================================================================//
     dojo.declare("js.LGFloorNavigator", [js.LGDropdownBox, js.LGMapDependency], {
@@ -26,53 +27,57 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         * @constructor
         * @class
         * @name js.LGFloorNavigator
-        * @extends js.LGDropdownBox,js.LGMapDependency
+        * @extends js.LGDropdownBox, js.LGMapDependency
         * @classdesc
         * Provides the functionality to filter the layer(s)
         */
         constructor: function () {
-            var labelDiv, label, navigatorfloorBox, navigatorTable, navigatorBody, trBody,
-             tdFloorBody, selectFloorImg, mainDiv;
+            var labelDiv, navigatorFloorBox, navigatorTable, navigatorBody, trBody,
+                tdFloorBody, selectFloorImg, mainDiv, pThis = this;
             mainDiv = domConstruct.create("div", {}, this.rootId);
             labelDiv = domConstruct.create("div", { className: this.labelDiv }, mainDiv);
-            label = domConstruct.create("label", { innerHTML: this.checkForSubstitution(this.showPrompt), className: this.label }, labelDiv);
-            navigatorfloorBox = domConstruct.create("div", {}, mainDiv);
-            this.applyThemeAltBkgd(false, navigatorfloorBox);
+            domConstruct.create("label",
+                { innerHTML: this.checkForSubstitution(this.showPrompt), className: this.label }, labelDiv);
+            navigatorFloorBox = domConstruct.create("div", {}, mainDiv);
+            this.applyThemeAltBkgd(false, navigatorFloorBox);
             this.applyTheme(false, labelDiv);
-            navigatorTable = domConstruct.create("table", { className: this.navigatorTable }, navigatorfloorBox);
+            navigatorTable = domConstruct.create("table", { className: this.navigatorTable }, navigatorFloorBox);
             navigatorBody = domConstruct.create("tbody", { className: this.navigatorBodyClass }, navigatorTable);
             trBody = domConstruct.create("tr", {}, navigatorBody);
             tdFloorBody = domConstruct.create("td", {}, trBody);
-            input = domConstruct.create("input", { className: this.inputBox, value: this.Defaultfloor }, tdFloorBody);
-            selectFloorImg = domConstruct.create("img", { src: this.searchButtonImage, className: this.searchButton }, tdFloorBody);
-            selectFloorImg.onclick = function () {
-                this.onFloorFieldValueChange(this);
+            this.input = domConstruct.create("input", { className: this.inputBox, value: this.defaultFloor }, tdFloorBody);
+            topic.publish("input", this.defaultFloor);
+            selectFloorImg = domConstruct.create("img",
+                { src: this.searchButtonImage, className: this.searchButton }, tdFloorBody);
+            selectFloorImg.onClick = function () {
+                pThis.onFloorFieldValueChange();
             };
-            on(input, "change", lang.hitch(this, function () {
-                this.onFloorFieldValueChange(this);
+            on(this.input, "change", lang.hitch(this, function () {
+                pThis.onFloorFieldValueChange();
             }));
         },
 
         /**
-        * Loop through the layers array on which definition expression is applied and call setLayerDefinitionExpression with the new value.
-        * @param {object} reference of the current widget
+        * Loops through the layers array on which definition expression is applied and calls
+        * setLayerDefinitionExpression with the new value.
         * @memberOf js.LGFloorNavigator#
         */
-        onFloorFieldValueChange: function (pThis) {
-            var newValue, message, field;
-            pThis.mapObj.mapInfo.map.infoWindow.hide();
-            newValue = input.value.trim();
+        onFloorFieldValueChange: function () {
+            var newValue, message, field, pThis = this;
+            this.mapObj.mapInfo.map.infoWindow.hide();
+            newValue = this.input.value.trim();
+            topic.publish("input", newValue);
+            //loop through the layers to apply the definition expression.Only the features that match the definition expression are displayed.
             array.forEach(pThis.layers, function (layer) {
                 pThis.setLayerDefinitionExpression(layer.layerObject, layer.floorFieldType, newValue);
                 layer.layerObject.clearSelection();
-                for (field = 0; field < layer.layerObject.fields.length; field++) {
-                    if (layer.layerObject.fields[field].name === pThis.FloorField) {
-                        if ((input.value.trim().length > layer.layerObject.fields[field].length)) {
+                //check if the floor value entered in the input exceeds the maximum length of the floor field
+                for (field = 0; field < layer.layerObject.fields.length; field += 1) {
+                    if (layer.layerObject.fields[field].name === pThis.floorField) {
+                        //if the length of the input value is greater than the floor field length throw an alert
+                        if ((pThis.input.value.trim().length > layer.layerObject.fields[field].length)) {
                             message = pThis.checkForSubstitution("@messages.invalidValue");
                             alert(string.substitute(message, [layer.layerObject.fields[field].length]));
-                        }
-                        else if (input.value.trim().length === 0) {
-                            input.value = pThis.checkForSubstitution("@prompts.nullFloorValue");
                         }
                     }
                 }
@@ -86,37 +91,53 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         * @override
         */
         onDependencyReady: function () {
-            var pThis, layerAndDefExpObject, response, field;
+            var pThis, layerAndDefExpObject, response, field, mapPoint, map;
             pThis = this;
-            pThis.layers = [];
+            map = pThis.mapObj.mapInfo.map;
+            this.layers = [];
             response = pThis.mapObj;
+            //Get the coordinates of info window anchor before it is shown
+            aspect.before(map.infoWindow, "show", function (coords) {
+                if (!coords.spatialReference) {
+                    mapPoint = new screenUtils.toMapGeometry(map.extent, map.width, map.height, coords);
+                } else {
+                    mapPoint = coords;
+                }
+                pThis.x = mapPoint.x;
+                pThis.y = mapPoint.y;
+            });
+            //center the info window whenever it is shown. 
             dojo.connect(pThis.mapObj.mapInfo.map.infoWindow, "onShow", function () {
-                pThis.infoWindowCenter(pThis);
+                pThis.infoWindowCenter();
                 query(".appTheme", dom.byId("templatePicker")).forEach(function (node) {
                     node.className = "";
                 });
             });
+            //center the info window whenever the  map is resized
             on(pThis.mapObj.mapInfo.map, "resize", function () {
                 if (pThis.mapObj.mapInfo.map.infoWindow.isShowing) {
                     setTimeout(function () {
-                        pThis.infoWindowCenter(pThis);
+                        pThis.infoWindowCenter();
                     }, 500);
                 }
             });
             layerAndDefExpObject = { layerObject: null, floorFieldType: null };
+            //Loop through all the operation layers added to the map. If layer type is Feature layer, find if layer has floor field. 
+            //if all above conditions are satisfied push the field type and layer object to an array of object.
             array.forEach(response.mapInfo.itemInfo.itemData.operationalLayers, lang.hitch(this, function (mapLayer) {
                 if (mapLayer.layerObject) {
                     if (mapLayer.layerObject.type === "Feature Layer") {
-                        for (field = 0; mapLayer.layerObject.fields.length; field++) {
-                            if (mapLayer.layerObject.fields[field].name === pThis.FloorField) {
+                        for (field = 0; mapLayer.layerObject.fields.length; field += 1) {
+                            if (mapLayer.layerObject.fields[field].name === pThis.floorField) {
                                 if (mapLayer.layerObject.fields[field].type === "esriFieldTypeString") {
-                                    this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeString", input.value);
+                                    this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeString",
+                                        this.input.value);
                                     layerAndDefExpObject.layerObject = mapLayer.layerObject;
                                     layerAndDefExpObject.floorFieldType = "esriFieldTypeString";
                                     pThis.layers.push(layerAndDefExpObject);
-                                }
-                                else if (mapLayer.layerObject.fields[field].type === "esriFieldTypeInteger") {
-                                    this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeInteger", input.value);
+                                } else if (mapLayer.layerObject.fields[field].type === "esriFieldTypeInteger") {
+                                    this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeInteger",
+                                        this.input.value);
                                     layerAndDefExpObject.layerObject = mapLayer.layerObject;
                                     layerAndDefExpObject.floorFieldType = "esriFieldTypeInteger";
                                     pThis.layers.push(layerAndDefExpObject);
@@ -130,28 +151,27 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         },
 
         /**
-        * Centers the infowindow
+        * Centers the info window
         * @memberOf js.LGFloorNavigator#
-        * @param {object} pThis reference of the current widget
         * @override
         */
-        infoWindowCenter: function (pThis) {
-            var cords, xmin, ymin, xmax, ymax, extent;
-            cords = domGeom.position(dom.byId(pThis.rootId));
-            if (cords.h <= 0) {
-                cords = domGeom.position(dom.byId("diagMessageBox"));
+        infoWindowCenter: function () {
+            var coords, xmin, ymin, xmax, ymax, extent, pThis;
+            pThis = this;
+            coords = domGeom.position(dom.byId(this.rootId));
+            if (coords.h <= 0) {
+                coords = domGeom.position(dom.byId("diagMessageBox"));
             }
-            xmin = pThis.mapObj.mapInfo.map.infoWindow._location.x;
-            ymin = pThis.mapObj.mapInfo.map.infoWindow._location.y;
-            if (cords.h > 0) {
-                xmax = (pThis.mapObj.mapInfo.map.infoWindow._location.x);
+            xmin = pThis.x;
+            ymin = pThis.y;
+            if (coords.h > 0) {
+                xmax = pThis.x;
+            } else {
+                xmax = pThis.x;
             }
-            else {
-                xmax = pThis.mapObj.mapInfo.map.infoWindow._location.x;
-            }
-            ymax = pThis.mapObj.mapInfo.map.infoWindow._location.y;
-            extent = new Extent(xmin, ymin, xmax, ymax, pThis.mapObj.mapInfo.map.spatialReference);
-            pThis.mapObj.mapInfo.map.setExtent(extent);
+            ymax = pThis.y;
+            extent = new Extent(xmin, ymin, xmax, ymax, this.mapObj.mapInfo.map.spatialReference);
+            this.mapObj.mapInfo.map.setExtent(extent);
             setTimeout(function () {
                 pThis.mapObj.mapInfo.map.infoWindow.reposition();
             }, 500);
@@ -160,24 +180,24 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         /**
         * Filters the layer based on the definition expression
         * @memberOf js.LGFloorNavigator#
-        * @param {object} layer layer to be filtered
-        * @param {string|integer} floorFieldType Type of the floor feild
-        * @param {string} spinnerValue value for which the layer has to be filtered
+        * @param {object} layer Layer to be filtered
+        * @param {string|integer} floorFieldType Type of the floor field
+        * @param {string} spinnerValue Value for which the layer has to be filtered
         */
         setLayerDefinitionExpression: function (layer, floorFieldType, spinnerValue) {
             var defExpression = "";
             if (floorFieldType === "esriFieldTypeString") {
-                defExpression = this.FloorField + "='" + spinnerValue + "'";
+                defExpression = this.floorField + "='" + spinnerValue + "'";
                 layer.setDefinitionExpression(defExpression);
-            }
-            else if (floorFieldType === "esriFieldTypeInteger") {
-                defExpression = this.FloorField + "=" + spinnerValue;
+            } else if (floorFieldType === "esriFieldTypeInteger") {
+                defExpression = this.floorField + "=" + spinnerValue;
                 layer.setDefinitionExpression(defExpression);
             }
         },
 
         /**
-        * Functions class is been added and removed because touchScroll in ipad was not working
+        * It is observed that touch scroll does not work in iPad until some style changes when widget is reopened.
+        * Hence as a safe workaround empty class is being added and removed from the widget.
         * @memberOf js.LGFloorNavigator#
         */
         toggleVisibility: function () {
@@ -202,27 +222,29 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         * @constructor
         * @class
         * @name js.LGFloorNavigator
-        * @extends js.LGDropdownBox,js.LGMapDependency
+        * @extends js.LGDropdownBox, js.LGMapDependency
         * @classdesc
-        * Provides the functionaility to perform editing tasks on the layer(s)
+        * Provides the functionality to perform editing tasks on the layer(s)
         */
         constructor: function () {
-
-            var pThis, labelDiv, label;
-            pThis = this;
+            var labelDiv;
             dom.byId(this.rootId).className = this.rootClass;
             labelDiv = domConstruct.create("div",
-                            { className: this.labelDiv }, this.rootId);
-            label = domConstruct.create("label",
-                            { innerHTML: this.checkForSubstitution(this.showPrompt), className: this.label }, labelDiv);
+                { className: this.labelDiv }, this.rootId);
+            domConstruct.create("label",
+                { innerHTML: this.checkForSubstitution(this.showPrompt), className: this.labelClass }, labelDiv);
             this.templatePickerDivBox = domConstruct.create("div",
-                            { className: this.templatePickerDivBoxClass }, this.rootId);
-            pThis.applyTheme(false, labelDiv);
-            pThis.applyThemeAltBkgd(false, this.templatePickerDivBox);
+                { className: this.templatePickerDivBoxClass }, this.rootId);
+            this.applyTheme(false, labelDiv);
+            this.applyThemeAltBkgd(false, this.templatePickerDivBox);
             this.templatePickerDiv = domConstruct.create("div",
                 {}, this.templatePickerDivBox);
-            pThis.layers = [];
-            pThis.layerInfos = [];
+            this.layers = [];
+            this.layerInfos = [];
+            this.input = isNaN(this.defaultFloor) ? this.defaultFloor.toString().trim() : this.defaultFloor;
+            topic.subscribe("input", lang.hitch(this, function (newValue) {
+                this.input = isNaN(newValue) ? newValue.toString().trim() : newValue;
+            }));
         },
 
         /**
@@ -237,10 +259,11 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         * @override
         */
         onDependencyReady: function () {
-            var pThis, cords, templatePicker, feature, settings, params, myEditor;
+            var pThis, coords, templatePicker, feature, settings, params, myEditor;
             pThis = this;
-            feature = pThis.mapObj;
+            feature = this.mapObj;
             feature.mapInfo.map.infoWindow.hide();
+            //checking for editable layers by looping all the layers and pushing them in a n array
             array.forEach(feature.mapInfo.itemInfo.itemData.operationalLayers, function (mapLayer) {
                 if (mapLayer.layerObject) {
                     if (mapLayer.layerObject.isEditable()) {
@@ -256,7 +279,7 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                 dom.byId(pThis.rootId).style.display = "none";
                 domClass.add(dom.byId(pThis.parentDiv), pThis.navigatorHeightClass);
             }
-            cords = domGeom.position(pThis.mapObj.rootId);
+            coords = domGeom.position(this.mapObj.rootId);
             templatePicker = new TemplatePicker({
                 featureLayers: pThis.layers,
                 rows: "auto",
@@ -265,16 +288,18 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                 grouping: true
             }, this.templatePickerDiv);
             templatePicker.startup();
-            templatePicker.domNode.style.height = (cords.h - 205) + "px";
+            templatePicker.domNode.style.height = (coords.h - 205) + "px";
             touchScroll(this.templatePickerDivBox);
-            on(pThis.mapObj.mapInfo.map, "resize", function () {
+            //adjusting the height of template picker on map resize
+            on(this.mapObj.mapInfo.map, "resize", function () {
                 setTimeout(function () {
-                    var cords = domGeom.position(pThis.parentDiv);
-                    if (cords.h > 0) {
-                        templatePicker.domNode.style.height = (cords.h - 145) + "px";
+                    var coords = domGeom.position(pThis.parentDiv);
+                    if (coords.h > 0) {
+                        templatePicker.domNode.style.height = (coords.h - 145) + "px";
                     }
                 }, 500);
             });
+            //On click of an item in template picker, change the the row background color and padding. 
             on(templatePicker, "click", function () {
                 query(".selectedItem", templatePicker.domNode).forEach(function (node) {
                     node.className = "";
@@ -285,6 +310,7 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                     pThis.applyTheme(false, node);
                 });
             });
+            //apply the theme color to the template picker row on mouse over
             on(templatePicker, "mouseover", function () {
                 query(".appTheme", templatePicker.domNode).forEach(function (node) {
                     node.className = "";
@@ -292,6 +318,7 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                 });
             });
             this.templatePickerDivBox.parentElement.style.display = "block";
+            //settings for the editor widget
             settings = {
                 map: feature.mapInfo.map,
                 templatePicker: templatePicker,
@@ -301,17 +328,17 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
             params = { settings: settings };
             myEditor = new Editor(params, this.templatePickerDiv);
             myEditor.startup();
+            //push the floor value in the floor field of the attribute inspector
             aspect.before(myEditor, "_applyEdits", lang.hitch(this, function (arg1) {
                 if (arg1[0].adds) {
                     this.layer = arg1[0].layer;
-                    if (input.value.trim() === "") {
-                        arg1[0].adds[0].attributes[pThis.FloorField] = this.checkForSubstitution("@prompts.nullFloorValue");
+                    //if the floor value is blank in the input, substitute floor field of the attribute inspector by a configured value. 
+                    if (this.input === "") {
+                        arg1[0].adds[0].attributes[pThis.floorField] = this.checkForSubstitution("@prompts.nullFloorValue");
+                    } else {
+                        arg1[0].adds[0].attributes[pThis.floorField] = this.input;
                     }
-                    else {
-                        arg1[0].adds[0].attributes[pThis.FloorField] = input.value.trim();
-                    }
-                }
-                else if (!arg1[0].layer) {
+                } else if (!arg1[0].layer) {
                     arg1[0].layer = this.layer;
                 }
             }));
@@ -320,7 +347,8 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         },
 
         /**
-        * Functions class is been added and removed because touchScroll in ipad was not working
+        * It is observed that touch scroll does not work in iPad until some style changes when widget is reopened.
+        * Hence as a safe workaround empty class is being added and removed from the widget.
         * @memberOf js.LGEditFeature#
         */
         toggleVisibility: function () {
@@ -332,6 +360,3 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
         }
     });
 });
-
-
-

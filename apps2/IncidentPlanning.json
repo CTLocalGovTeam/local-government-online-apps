@@ -4,32 +4,114 @@
         "titleBar.title": "Pre-Incident Planning",
         "titleBar.iconUrl": "images/onlineapp.png",
         "colorizer.theme": "DarkGray",
-        "searchBox.hint": "42757 Woodward Ave",
-        "featureSearcher.searchLayerName": "Parcel Details",
-        "featureSearcher.searchFields": "SITEADDRESS,CNVYNAME,PARCELID",
-        "highlighter.showFeaturePopup": true,
-        "highlighter.highlightZoomLevel": 16,
+        "defaultFloor": 1,
+        "floorField": "FLOOR",
         "basemapBox.basemapgroupTitle": "",
         "basemapBox.basemapgroupOwner": "",
-        "Defaultfloor": 1,
-        "FloorField": "FLOOR",
         "helpMessageBox.content": "Parcel Viewer<hr><br>The Parcel Viewer provides the general public and other interested parties local government property tax and assessment information and supplements that information with lifestyle and internet broadband information for a given neighborhood.<br><br>To locate a parcel, simply click on the map or enter an address or parcel number in the search box and select a parcel from the list."
     },
     "configurationSettings": [
         {
+            "category": "Title",
+            "fields": [
+                {
+                    "label": "Application title",
+                    "fieldName": "titleBar.title",
+                    "type": "string",
+                    "tooltip": "Title to display in application's title bar"
+                },
+                {
+                    "label": "Application icon URL",
+                    "fieldName": "titleBar.iconUrl",
+                    "type": "string",
+                    "tooltip": "URL to icon to display in application's title bar"
+                },
+                {
+                    "label": "Color Scheme:",
+                    "fieldName": "colorizer.theme",
+                    "type": "string",
+                    "options": [
+                        {
+                            "label": "Dark Gray",
+                            "value": "DarkGray"
+                        },
+                        {
+                            "label": "Dark Green",
+                            "value": "DarkGreen"
+                        },
+                        {
+                            "label": "Dodger Blue",
+                            "value": "DodgerBlue"
+                        },
+                        {
+                            "label": "Gray",
+                            "value": "Gray"
+                        },
+                        {
+                            "label": "Brick",
+                            "value": "Brick"
+                        },
+                        {
+                            "label": "Thistle",
+                            "value": "Thistle"
+                        },
+                        {
+                            "label": "Turquoise",
+                            "value": "Turquoise"
+                        },
+                        {
+                            "label": "Orange",
+                            "value": "Orange"
+                        }
+                    ],
+                    "tooltip": "Color theme to use"
+                }
+            ]
+        },
+        {
             "category": "Pre-Incident",
             "fields": [
                 {
-                    "label": "Floor Hint",
-                    "fieldName": "Defaultfloor",
+                    "label": "Floor hint",
+                    "fieldName": "navigator.defaultFloor",
                     "type": "string",
-                    "tooltip": "Floor Hint"
+                    "tooltip": "Text to display in the navigator floor field as a format hint"
                 },
                 {
-                    "label": "Floor Field",
-                    "fieldName": "FloorField",
+                    "label": "Floor field",
+                    "fieldName": "navigator.floorField",
                     "type": "string",
-                    "tooltip": "Floor Field"
+                    "tooltip": "Field in the floor layer that indicates the floor for a record"
+                }
+            ]
+        },
+        {
+            "category": "Map",
+            "fields": [
+                {
+                    "label": "Name of basemap group",
+                    "fieldName": "basemapBox.basemapgroupTitle",
+                    "type": "string",
+                    "tooltip": "Name of the ArcGIS.com group containing your basemaps",
+                    "placeholder": "Defaults to Esri basemaps"
+                },
+                {
+                    "label": "Username of basemap group owner",
+                    "fieldName": "basemapBox.basemapgroupOwner",
+                    "type": "string",
+                    "tooltip": "ArcGIS.com username of owner of basemap group"
+                }
+            ]
+        },
+        {
+            "category": "Help",
+            "fields": [
+                {
+                    "label": "Help text",
+                    "fieldName": "helpMessageBox.content",
+                    "type": "string",
+                    "stringFieldOption": "textarea",
+                    "tooltip": "Text to display when the help button is clicked"
                 }
             ]
         }
@@ -151,21 +233,6 @@
             }
         },
         {
-            "classname": "js.LGHighlighter",
-            "config": {
-                "rootId": "highlighter",
-                "parentDiv": "contentFrame",
-                "dependencyId": "map",
-                "lineHiliteColor": "#0000ff",
-                "fillHiliteColor": [
-                    0,
-                    0,
-                    255,
-                    0.1
-                ]
-            }
-        },
-        {
             "classname": "js.LGTitleBar",
             "styles": ".appTitleBar{height:52px;margin:0px;padding:2px;overflow:hidden;position:absolute}.titleIcon{height:48px;margin:4px;padding:0px;float:left}.titleText{height:48px;margin:4px;padding:0px;font-size:200%;vertical-align:middle;word-wrap:break-word;float:left}@media all and (max-width: 520px){.titleText{display:none}}",
             "config": {
@@ -189,18 +256,6 @@
                 "vertOffset": 0,
                 "itemClass": "commandPanelItem",
                 "arrowClass": "commandPanelArrow"
-            }
-        },
-        {
-            "classname": "js.LGSearchFeatureLayer",
-            "config": {
-                "rootId": "featureSearcher",
-                "parentDiv": "contentFrame",
-                "dependencyId": "map",
-                "busyIndicator": "busyIndicator",
-                "publishPointsOnly": false,
-                "searchPattern": "%${1}%",
-                "caseInsensitiveSearch": true
             }
         },
         {
@@ -315,6 +370,19 @@
             }
         },
         {
+            "classname": "js.LGMapBasedMenuBox",
+            "styles": ".shareBox{display:none;padding:4px;position:absolute;overflow:hidden;z-index:40;word-wrap:break-word}.okIE .shareBox{border-radius:8px}",
+            "config": {
+                "rootId": "shareBox",
+                "parentDiv": "contentFrame",
+                "rootClass": "shareBox",
+                "horizOffset": -2,
+                "vertOffset": 2,
+                "trigger": "share",
+                "dependencyId": "map"
+            }
+        },
+        {
             "classname": "js.LGFloorNavigator",
             "styles": ".navigatorBox{visibility:hidden; display:block;width:300px;height:90%;position:absolute;overflow:hidden;}.searchButton{height:32px;width:32px;padding-top:1px;padding-right:1px;cursor:pointer;vertical-align: middle;padding-left:10px;}.okIE .navigatorBox{border-radius:8px;padding:0px; padding:0px;}.editFeatureBoxVisible{visibility:visible; display:none;}.labelDiv{height:32px;border-radius:8px 8px 0px 0px;padding-top:10px}.label{padding-top:15px;padding-left:10px;}.tdlabelBody{font-family:verdana;font-weight:regular;font-size:11px}.tdArrow{height:30px;width:30px;}.imgArrow{height:32px;width:32px;cursor: pointer; vertical-align: middle;}.inputBox{line-height:32px;vertical-align:middle;border:none !important;text-align:center !important;padding:0px !important;font-size:100%;width:220px;height:32px;border-radius:3px;}.navigatorTable{margin-left:13px;height:60px;}.tempClass {-webkit-box-shadow: 0 0 1px #000;-moz-box-shadow: 0 0 1px #000;box-shadow: 0 0 1px #000;}",
             "config": {
@@ -344,7 +412,7 @@
         },
         {
             "classname": "js.LGEditFeature",
-            "styles": ".editFeatureBox{display:block !important;width:300px;}.editfeatureDiv{height:40px;border-radius:8px 8px 0px 0px}.labelEditDiv{padding-top:10px;height:32px;}.label{padding:13px; }.templatePickerDivBox{width:100%;}.lt-ie9 .templatePickerDivBox{position:absolute;width:100%;}.okIE .templatePickerDivBox{bottom:4px;overflow-y:auto;overflow-x:hidden;}.lt-ie9 .templatePickerDivBox{width:100%;overflow-y:auto;overflow-x:hidden;}.navigatorHeightClass{height:110px !important;}.templatePicker .dojoxGrid{font-size:100%;} ",
+            "styles": ".editFeatureBox{display:block !important;width:300px;}.editfeatureDiv{height:40px;border-radius:8px 8px 0px 0px}.labelEditDiv{padding-top:10px;height:32px;}.label{padding:13px;}.templatePickerDivBox{width:100%;}.lt-ie9 .templatePickerDivBox{position:absolute;width:100%;}.okIE .templatePickerDivBox{bottom:4px;overflow-y:auto;overflow-x:hidden;}.lt-ie9 .templatePickerDivBox{width:100%;overflow-y:auto;overflow-x:hidden;}.navigatorHeightClass{height:110px !important;}.templatePicker .dojoxGrid{font-size:100%;}.dojoxGridScrollbox{background-color:transparent !important;}.templatePicker, .grid, .dojoxGridRowOver, .dojoxGridCell{background-color:transparent !important;}.templatePicker, .dojoxGrid{background-color:transparent;font-family:sans-serif;font-size:100%;}.templatePicker .grid .dojoxGridCell{width:280px;border: none !important;outline: medium none;!important} .okIE .templatePicker, .grid, .item{color:white !important;width:280px;}.okIE.templatePicker .grid .dojoxGridCell{border: none;!important}.okIE .templatePicker, .grid, .groupLabel{font-weight:normal !important;text-align:left !important;color : white !important;width:280px !important}.okIE .templatePicker .grid .dojoxGridCellOver{border : none !important;background-color:transparent !important;}.templatePicker{height:100%; border: none !important; padding: 1px 4px 0;}.dojoxGridRow,.dojoxGridRowOver{background-color:transparent !important;border:none!important;border-radius:none !important;}.dojoxGridView,.dojoxGridRowTable{width:280px;} .dojoxGrid{width:280px !important;}.itemSymbol{float:left;}.itemLabel{text-align:left;text-indent:7px;padding-top:5px;}.dojoxGridRowTable,.dojoxGridCellOver{background-color:transparent !important;border:none !important;} ",
             "config": {
                 "trigger": "navigator",
                 "publish": "showFeature",
@@ -359,59 +427,10 @@
                 "showPrompt": "@prompts.edit_features",
                 "editfeatureDiv": "editfeatureDiv",
                 "labelDiv": "labelEditDiv",
-                "label": "label",
+                "labelClass": "label",
                 "templatePickerDivBoxClass": "templatePickerDivBox",
                 "navigatorHeightClass": "navigatorHeightClass",
                 "dependencyId": "map"
-            }
-        },
-        {
-            "classname": "js.LGMapBasedMenuBox",
-            "styles": ".shareBox{display:none;padding:4px;position:absolute;overflow:hidden;z-index:40;word-wrap:break-word}.okIE .shareBox{border-radius:8px}",
-            "config": {
-                "rootId": "shareBox",
-                "parentDiv": "contentFrame",
-                "rootClass": "shareBox",
-                "horizOffset": -2,
-                "vertOffset": 2,
-                "trigger": "share",
-                "dependencyId": "map"
-            }
-        },
-        {
-            "classname": "js.LGSearchBoxByText",
-            "styles": ".searchBox{display:none;width:200px;max-height:224px;padding:4px;position:absolute;overflow:hidden;z-index:40;word-wrap:break-word}.okIE .searchBox{border-radius:8px}.resultsListBox{width:96%;top:53px;overflow:auto}.okIE .resultsListBox{position:absolute;bottom:4px}.lt-ie9 .resultsListBox{width:100%;height:182px}.resultsListTable{width:97%;margin:4px}.lt-ie9 .resultsListTable{width:87%}.resultsListBody{width:80%}.resultsListSearching{background-image:url('images/loading.gif');background-position:center center;background-repeat:no-repeat;width:100%;height:1.5em}.resultsListEntry{width:84%;margin:2px;padding:4px;cursor:pointer}",
-            "config": {
-                "trigger": "search",
-                "publish": "showFeature",
-                "parentDiv": "contentFrame",
-                "rootId": "searchBox",
-                "rootClass": "searchBox",
-                "horizOffset": -2,
-                "vertOffset": [
-                    2,
-                    -2
-                ],
-                "searcher": "featureSearcher",
-                "showPrompt": "@prompts.search",
-                "resultsListBoxClass": "resultsListBox",
-                "resultsListTableClass": "resultsListTable",
-                "resultsListBodyClass": "resultsListBody",
-                "resultsListSearchingClass": "resultsListSearching",
-                "resultsListEntryClass": "resultsListEntry"
-            }
-        },
-        {
-            "classname": "js.LGCommand",
-            "config": {
-                "tooltip": "@tooltips.search",
-                "iconUrl": "images/search.png",
-                "rootId": "search",
-                "parentDiv": "commandPanel",
-                "rootClass": "commandButton",
-                "iconClass": "commandIcon",
-                "dependencyId": "featureSearcher",
-                "publish": "search"
             }
         },
         {
@@ -463,18 +482,6 @@
                 "iconClass": "commandIcon",
                 "dependencyId": "shareBox",
                 "publish": "share"
-            }
-        },
-        {
-            "classname": "js.LGCommand",
-            "styles": ".dojoxGridScrollbox{background-color:transparent !important;}.templatePicker, .grid, .dojoxGridRowOver, .dojoxGridCell{background-color:transparent !important;}.templatePicker, .dojoxGrid{background-color:transparent;font-family:sans-serif;font-size:100%;}.templatePicker .grid .dojoxGridCell{width:280px;border: none !important;outline: medium none;!important} .okIE .templatePicker, .grid, .item{color:white !important;width:280px;}.okIE.templatePicker .grid .dojoxGridCell{border: none;!important}.okIE .templatePicker, .grid, .groupLabel{font-weight:normal !important;text-align:left !important;color : white !important;width:280px !important}.okIE .templatePicker .grid .dojoxGridCellOver{border : none !important;background-color:transparent !important;}.templatePicker{height:100%; border: none !important; padding: 1px 4px 0;}.dojoxGridRow,.dojoxGridRowOver{background-color:transparent !important;border:none!important;border-radius:none !important;}.dojoxGridView,.dojoxGridRowTable{width:280px;} .dojoxGrid{width:280px !important;}.itemSymbol{float:left;}.itemLabel{text-align:left;text-indent:7px;padding-top:5px;}.dojoxGridRowTable,.dojoxGridCellOver{background-color:transparent !important;border:none !important;}",
-            "config": {
-                "rootId": "grid",
-                "parentDiv": "commandPanel",
-                "rootClass": "",
-                "grid": "grid",
-                "iconClass": "commandIcon",
-                "publish": "grid"
             }
         },
         {
