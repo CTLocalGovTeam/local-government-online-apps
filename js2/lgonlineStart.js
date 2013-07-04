@@ -53,7 +53,7 @@ require(["dojo/ready", "dojo/Deferred", "esri/map", "dojo/i18n"], function (read
                         });
 
                         // Read the UI spec
-                        (new js.LGUIBuilder(window.location.search, null, "apps2/ParcelViewer")).ready.then(
+                        (new js.LGUIBuilder(window.location.search, null, "apps2/IncidentPlanning")).ready.then(
                             function (theBuilder) {
                                 uiElementsReady.then(function () {
                                     // Build the UI

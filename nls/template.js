@@ -1,4 +1,4 @@
-﻿/** @license
+/** @license
  | ArcGIS for Local Government
  | Version 10.2
  | Copyright 2012 Esri
@@ -30,7 +30,8 @@ define({
             fetchPrint: "View printed map",
             landscape: "Landscape page orientation",
             portrait: "Portrait page orientation",
-            help: "Help"
+            help: "Help",
+            navigator: "Navigator"
         },
         labels: {
             email: "email",
@@ -41,14 +42,18 @@ define({
             search: "Search:",
             markup: "Draw",
             mapLayers: "Map layers:",
-            layerFields: "Search layer fields:"
+            layerFields: "Search layer fields:",
+            navigator: "Building Floor",
+            edit_features: "Update Map",
+            nullFloorValue: "N/A"
         },
         messages: {
             geolocationDenied: "This site does not have permission to get the current location",
             geolocationUnavailable: "The browser was not able to get the current location",
             geolocationTimeout: "The browser was not able to get the current location in a timely fashion",
             searchLayerMissing: "This search layer was not found in the map",
-            searchFieldMissing: "This field was not found in the map search layer"
+            searchFieldMissing: "This field was not found in the map search layer",
+            invalidValue: "Floor value should be maximum of ${0} characters for adding or viewing the features"
         }
     }),
     "ar": 1,

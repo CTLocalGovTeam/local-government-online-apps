@@ -1,4 +1,4 @@
-﻿/*global define,dojo,js,window,esri */
+/*global define,dojo,js,window,esri */
 /*jslint sloppy:true */
 /*
  | Copyright 2012 Esri
@@ -125,7 +125,13 @@ define("js/lgonlineMap", ["dojo/dom-construct", "dojo/on", "dojo/_base/lang", "d
              */
             this.ready = new Deferred();
 
-            options = {ignorePopups: false};
+            //It is assumed that if floorField is present in config file, floor navigator widget will be configured as part of application.
+            //ignorePopUps is set to false to disable web map popup.
+            if (!pThis.floorField) {
+                options = { ignorePopups: false };
+            } else {
+                options = { ignorePopups: true };
+            }
             options.mapOptions = this.mapOptions || {};
             options.mapOptions.showAttribution = true;
 
@@ -194,39 +200,43 @@ define("js/lgonlineMap", ["dojo/dom-construct", "dojo/on", "dojo/_base/lang", "d
             utils.createMap(this.mapId, this.rootDiv, options).then(
                 function (response) {
                     var popupContentDiv;
-
                     pThis.mapInfo = response;
 
-                    // Fill in the missing parts so that an InfoWindowLite can serve as a popup
-                    pThis.popup = new esri.dijit.InfoWindowLite(null, dojo.create("div", null, map.root));
-                    if (!pThis.popup.clearFeatures) {
-                        pThis.popup.clearFeatures = function () {
-                            pThis.popup.setContent("");
-                        };
-                    }
-                    if (!pThis.popup.setFeatures) {
-                        pThis.popup.setFeatures = function (features) {
-                            // features is an array of features or Deferreds to features;
-                            // the InfoWindowLite only uses the first one
-                            if (features && features.length > 0) {
-                                features[0].then(function (feature) {
-                                    // Resolution of Deferred is also an array
-                                    if (feature && feature.length > 0) {
-                                        if (pThis.popupTemplate) {
-                                            feature[0].setInfoTemplate(pThis.popupTemplate);
+                    //It is assumed that if floorField is present in config file, floor navigator widget will be configured as part of application.
+                    //if floorField is present do not create popup.
+                    if (!pThis.floorField) {
+                        // Fill in the missing parts so that an InfoWindowLite can serve as a popup
+                        pThis.popup = new esri.dijit.InfoWindowLite(null, dojo.create("div", null, map.root));
+                        if (!pThis.popup.clearFeatures) {
+                            pThis.popup.clearFeatures = function () {
+                                pThis.popup.setContent("");
+                            };
+                        }
+                        if (!pThis.popup.setFeatures) {
+                            pThis.popup.setFeatures = function (features) {
+                                // features is an array of features or Deferreds to features;
+                                // the InfoWindowLite only uses the first one
+                                if (features && features.length > 0) {
+                                    features[0].then(function (feature) {
+                                        // Resolution of Deferred is also an array
+                                        if (feature && feature.length > 0) {
+                                            if (pThis.popupTemplate) {
+                                                feature[0].setInfoTemplate(pThis.popupTemplate);
+                                            }
+                                            pThis.popup.setContent(feature[0].getContent());
                                         }
-                                        pThis.popup.setContent(feature[0].getContent());
-                                    }
-                                });
-                            }
-                        };
-                    }
-                    pThis.popup.startup();
-                    pThis.mapInfo.map.setInfoWindow(pThis.popup);
+                                    });
+                                }
+                            };
+                        }
 
-                    // Fix popup's content-area scrolling for Android and iOS
-                    popupContentDiv = query(".simpleInfoWindow .content")[0];
-                    touchScroll(popupContentDiv);
+                        pThis.popup.startup();
+                        pThis.mapInfo.map.setInfoWindow(pThis.popup);
+
+                        // Fix popup's content-area scrolling for Android and iOS
+                        popupContentDiv = query(".simpleInfoWindow .content")[0];
+                        touchScroll(popupContentDiv);
+                    }
 
                     //for some reason if the webmap uses a bing map basemap the response doesn't have a spatialReference defined.
                     //this is a bit of a hack to set it manually
