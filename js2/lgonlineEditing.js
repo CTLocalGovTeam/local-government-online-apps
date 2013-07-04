@@ -126,7 +126,7 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
             array.forEach(response.mapInfo.itemInfo.itemData.operationalLayers, lang.hitch(this, function (mapLayer) {
                 if (mapLayer.layerObject) {
                     if (mapLayer.layerObject.type === "Feature Layer") {
-                        for (field = 0; mapLayer.layerObject.fields.length; field += 1) {
+                        for (field = 0; field < mapLayer.layerObject.fields.length; field += 1) {
                             if (mapLayer.layerObject.fields[field].name === pThis.floorField) {
                                 if (mapLayer.layerObject.fields[field].type === "esriFieldTypeString") {
                                     this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeString",
