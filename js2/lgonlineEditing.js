@@ -120,7 +120,6 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                     }, 500);
                 }
             });
-            layerAndDefExpObject = { layerObject: null, floorFieldType: null };
             //Loop through all the operation layers added to the map. If layer type is Feature layer, find if layer has floor field.
             //if all above conditions are satisfied push the field type and layer object to an array of object.
             array.forEach(response.mapInfo.itemInfo.itemData.operationalLayers, lang.hitch(this, function (mapLayer) {
@@ -131,14 +130,18 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                                 if (mapLayer.layerObject.fields[field].type === "esriFieldTypeString") {
                                     this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeString",
                                         this.input.value);
-                                    layerAndDefExpObject.layerObject = mapLayer.layerObject;
-                                    layerAndDefExpObject.floorFieldType = "esriFieldTypeString";
+                                    layerAndDefExpObject = {
+                                        "layerObject": mapLayer.layerObject,
+                                        "floorFieldType": "esriFieldTypeString"
+                                    };
                                     pThis.layers.push(layerAndDefExpObject);
                                 } else if (mapLayer.layerObject.fields[field].type === "esriFieldTypeInteger") {
                                     this.setLayerDefinitionExpression(mapLayer.layerObject, "esriFieldTypeInteger",
                                         this.input.value);
-                                    layerAndDefExpObject.layerObject = mapLayer.layerObject;
-                                    layerAndDefExpObject.floorFieldType = "esriFieldTypeInteger";
+                                    layerAndDefExpObject = {
+                                        "layerObject": mapLayer.layerObject,
+                                        "floorFieldType": "esriFieldTypeString"
+                                    };
                                     pThis.layers.push(layerAndDefExpObject);
                                 }
                                 break;
