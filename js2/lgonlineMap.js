@@ -1,4 +1,4 @@
-/*global define,dojo,js,window,esri */
+﻿/*global define,dojo,js,window,esri */
 /*jslint sloppy:true */
 /*
  | Copyright 2012 Esri
@@ -16,7 +16,7 @@
  | limitations under the License.
  */
 //============================================================================================================================//
-define("js/lgonlineMap", ["dojo/dom-construct", "dojo/on", "dojo/_base/lang", "dojo/_base/array", "dojo/Deferred", "dojo/query", "esri/arcgis/utils", "dojo/topic", "dojo/_base/Color", "esri/dijit/InfoWindowLite", "js/lgonlineBase"], function (domConstruct, on, lang, array, Deferred, query, utils, topic, Color, InfoWindowLite) {
+define("js/lgonlineMap", ["dojo/dom-construct", "dojo/on", "dojo/_base/lang", "dojo/_base/array", "dojo/Deferred", "dojo/query", "esri/arcgis/utils", "dojo/topic", "dojo/_base/Color", "js/lgonlineBase"], function (domConstruct, on, lang, array, Deferred, query, utils, topic, Color) {
 
     //========================================================================================================================//
 
@@ -125,15 +125,12 @@ define("js/lgonlineMap", ["dojo/dom-construct", "dojo/on", "dojo/_base/lang", "d
              */
             this.ready = new Deferred();
 
-            //It is assumed that if floorField is present in config file, floor navigator widget will be configured as part of application.
-            //ignorePopUps is set to false to disable web map popup.
-            if (!pThis.floorField) {
-                options = { ignorePopups: false };
-            } else {
-                options = { ignorePopups: true };
-            }
+            options = {ignorePopups: this.toBoolean(this.ignorePopups, false)};
             options.mapOptions = this.mapOptions || {};
             options.mapOptions.showAttribution = true;
+
+            this.popup = new esri.dijit.Popup(null, domConstruct.create("div"));
+            options.mapOptions.infoWindow = this.popup;
 
             // Set up configured extents
             if (this.xmin && this.ymin && this.xmax && this.ymax) {
@@ -199,47 +196,10 @@ define("js/lgonlineMap", ["dojo/dom-construct", "dojo/on", "dojo/_base/lang", "d
 
             utils.createMap(this.mapId, this.rootDiv, options).then(
                 function (response) {
-                    var popupContentDiv;
                     pThis.mapInfo = response;
 
-                    //It is assumed that if floorField is present in config file, floor navigator widget will be configured as part of application.
-                    //if floorField is present do not create popup.
-                    if (!pThis.floorField) {
-                        // Fill in the missing parts so that an InfoWindowLite can serve as a popup
-                        pThis.popup = new esri.dijit.InfoWindowLite(null, dojo.create("div", null, map.root));
-                        if (!pThis.popup.clearFeatures) {
-                            pThis.popup.clearFeatures = function () {
-                                pThis.popup.setContent("");
-                            };
-                        }
-                        if (!pThis.popup.setFeatures) {
-                            pThis.popup.setFeatures = function (features) {
-                                // features is an array of features or Deferreds to features;
-                                // the InfoWindowLite only uses the first one
-                                if (features && features.length > 0) {
-                                    features[0].then(function (feature) {
-                                        // Resolution of Deferred is also an array
-                                        if (feature && feature.length > 0) {
-                                            if (pThis.popupTemplate) {
-                                                feature[0].setInfoTemplate(pThis.popupTemplate);
-                                            }
-                                            pThis.popup.setContent(feature[0].getContent());
-                                        }
-                                    });
-                                }
-                            };
-                        }
-
-                        pThis.popup.startup();
-                        pThis.mapInfo.map.setInfoWindow(pThis.popup);
-
-                        // Fix popup's content-area scrolling for Android and iOS
-                        popupContentDiv = query(".simpleInfoWindow .content")[0];
-                        touchScroll(popupContentDiv);
-                    }
-
-                    //for some reason if the webmap uses a bing map basemap the response doesn't have a spatialReference defined.
-                    //this is a bit of a hack to set it manually
+                    // For some reason if the webmap uses a bing map basemap the response doesn't have a spatialReference defined.
+                    // This is a bit of a hack to set it manually
                     if (!response.map.spatialReference) {
                         pThis.mapInfo.map.spatialReference = new esri.SpatialReference({wkid: 102100});
                     }
