@@ -140,7 +140,7 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                                         this.input.value);
                                     layerAndDefExpObject = {
                                         "layerObject": mapLayer.layerObject,
-                                        "floorFieldType": "esriFieldTypeString"
+                                        "floorFieldType": "esriFieldTypeInteger"
                                     };
                                     pThis.layers.push(layerAndDefExpObject);
                                 }
