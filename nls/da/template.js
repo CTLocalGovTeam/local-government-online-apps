@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Del via e-mail",
             shareViaFacebook: "Del via Facebook",
             shareViaTwitter: "Del via Twitter",
-            print: "Opret kortudskrift",
-            fetchPrint: "Hent kortudskrift",
+            print: "Udskriv kort",
+            fetchPrint: "Vis udskrevet kort",
             landscape: "På langs",
             portrait: "På højkant",
             help: "Hjælp"

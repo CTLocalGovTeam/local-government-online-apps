@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Bendrinti naudojant el. paštą",
             shareViaFacebook: "Bendrinti per Facebook",
             shareViaTwitter: "Bendrinti per Twitter",
-            print: "Sukurti žemėlapio atspaudą",
-            fetchPrint: "Gauti žemėlapio atspaudą",
+            print: "Spausdinti žemėlapį",
+            fetchPrint: "Peržiūrėti spausdintą žemėlapį",
             landscape: "Gulsčiai",
             portrait: "Stačiai",
             help: "Pagalba"

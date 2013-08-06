@@ -5,9 +5,9 @@
 <html class="no-js okIE" lang="en">
 <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+    <meta charset=utf-8>
     <!--
-     | Version 10.1.2
+     | Version 10.2
      | Copyright 2012 Esri
      |
      | Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
      | See the License for the specific language governing permissions and
      | limitations under the License.
     -->
-    <meta http-equiv="X-UA-Compatible" content="IE=7,IE=9,IE=10" />
+    <!--[if IE 8]><meta http-equiv="X-UA-Compatible" content="IE=7"><![endif]-->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -31,31 +31,33 @@
     <meta http-equiv="Expires" content="-1">
     <![endif]-->
     <link rel="dns-prefetch" href="http://serverapi.arcgisonline.com" />
+
     <title>Local Government online app</title>
     <meta name="description" content="Local Government online app">
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css" />
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.6/js/dojo/dijit/themes/claro/claro.css"/>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.6/js/esri/css/esri.css" />
     <link rel="apple-touch-icon-precomposed" href="images/onlineapp.png" />
     <style>
         html, body
         {
-            height: 100%;
-            font-size: 100%;
-            font-family: sans-serif;
-            overflow:hidden;
+            height:100%;
+            font-size:100%;
+            font-family:sans-serif;
+            overflow: hidden;
         }
         .fill
         {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin:0;
+            padding:0;
+            width:100%;
+            height:100%;
+            overflow: hidden;
         }
         .startupBkgd
         {
-            background-image: url("images/loading.gif");
-            background-position: center;
-            background-repeat: no-repeat;
+            background-image:url("images/loading.gif");
+            background-position:center;
+            background-repeat:no-repeat;
         }
         .noJavaScriptMessage
         {
@@ -69,47 +71,48 @@
         }
         @media screen and (max-height:550px)
         {
-            .contentPane
+            .esriPopup .contentPane
             {
                 max-height: 300px;
             }
         }
         @media screen and (max-height:500px)
         {
-            .contentPane
+            .esriPopup .contentPane
             {
                 max-height: 250px;
             }
         }
         @media screen and (max-height:450px)
         {
-            .contentPane
+            .esriPopup .contentPane
             {
                 max-height: 200px;
             }
         }
         @media screen and (max-height:400px)
         {
-            .contentPane
+            .esriPopup .contentPane
             {
                 max-height: 150px;
             }
         }
         @media screen and (max-height:350px)
         {
-            .contentPane
+            .esriPopup .contentPane
             {
                 max-height: 100px;
             }
         }
         @media screen and (max-height:300px)
         {
-            .contentPane
+            .esriPopup .contentPane
             {
                 max-height: 50px;
             }
         }
     </style>
+
 </head>
 <body id="pageBody" class="claro fill startupBkgd">
     <div id="contentDiv" class="fill transparent">
@@ -143,7 +146,7 @@
         dojoConfig.cacheBust = true;
     </script>
     <!--<![endif]-->
-    <script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+    <script src="http://js.arcgis.com/3.6/"></script>
     <script src="js2/libs.js"></script>
     <script src="js2/lgonlineStart.js"></script>
 </body>

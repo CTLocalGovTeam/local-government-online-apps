@@ -26,8 +26,8 @@ define(
             shareViaEmail: "שתף בדוא\"ל",
             shareViaFacebook: "שתף בפייסבוק",
             shareViaTwitter: "שתף בטוויטר",
-            print: "צור מפה להדפסה",
-            fetchPrint: "העלה את המפה להדפסה",
+            print: "הדפס מפה",
+            fetchPrint: "צפייה במפה המודפסת",
             landscape: "לרוחב",
             portrait: "לאורך",
             help: "עזרה"

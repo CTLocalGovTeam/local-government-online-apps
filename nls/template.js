@@ -31,7 +31,8 @@ define({
             landscape: "Landscape page orientation",
             portrait: "Portrait page orientation",
             help: "Help",
-            navigator: "Navigator"
+            navigator: "Navigator",
+            inputBox: "The maximum length of allowable characters is ${0}"
         },
         labels: {
             email: "email",
@@ -52,14 +53,15 @@ define({
             geolocationUnavailable: "The browser was not able to get the current location",
             geolocationTimeout: "The browser was not able to get the current location in a timely fashion",
             searchLayerMissing: "This search layer was not found in the map",
-            searchFieldMissing: "This field was not found in the map search layer",
-            invalidValue: "Floor value should be maximum of ${0} characters for adding or viewing the features"
+            searchFieldMissing: "This field was not found in the map search layer"
         }
     }),
     "ar": 1,
+    "cs": 1,
     "da": 1,
     "de": 1,
     "es": 1,
+    "fi": 1,
     "fr": 1,
     "he": 1,
     "it": 1,

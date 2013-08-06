@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Compartir por correo electrónico",
             shareViaFacebook: "Compartir a través de Facebook",
             shareViaTwitter: "Compartir a través de Twitter",
-            print: "Crear impresión del mapa",
-            fetchPrint: "Obtener la impresión del mapa",
+            print: "Imprimir mapa",
+            fetchPrint: "Ver mapa impreso",
             landscape: "Horizontal",
             portrait: "Vertical",
             help: "Ayuda"

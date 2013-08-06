@@ -220,7 +220,7 @@
         }
     }, {
         "classname": "js.LGBasemapBox",
-        "styles": ".basemapBox{display:none;width:269px;max-height:250px;padding:4px;position:absolute;overflow:hidden;z-index:40;word-wrap:break-word}.okIE .basemapBox{border-radius:8px}.basemapGallery{width:96%;height:96%;padding:4px;overflow-y:auto;}.lt-ie9 .basemapGallery{height:220px}",
+        "styles": ".basemapBox{display:none;width:280px;max-height:244px;padding:4px;position:absolute;overflow:hidden;z-index:40;word-wrap:break-word}.okIE .basemapBox{border-radius:8px}.basemapGallery{width:96%;height:96%;padding:4px;overflow-y:auto;}.lt-ie9 .basemapGallery{height:220px}",
         "config": {
             "rootId": "basemapBox",
             "parentDiv": "contentFrame",

@@ -26,8 +26,8 @@ define(
             shareViaEmail: "مشاركة عن طريق البريد الإلكتروني",
             shareViaFacebook: "مشاركة عن طريق Facebook",
             shareViaTwitter: "مشاركة عن طريق Twitter",
-            print: "إنشاء طباعة خريطة",
-            fetchPrint: "البدء في طباعة الخريطة",
+            print: "طباعة الخريطة",
+            fetchPrint: "عرض الخريطة المطبوعة",
             landscape: "وضع أفقي",
             portrait: "وضع عمودي",
             help: "تعليمات"

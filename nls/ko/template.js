@@ -26,8 +26,8 @@ define(
             shareViaEmail: "이메일을 통해 공유",
             shareViaFacebook: "Facebook을 통해 공유",
             shareViaTwitter: "Twitter를 통해 공유",
-            print: "맵 인쇄 생성",
-            fetchPrint: "맵 인쇄 가져오기",
+            print: "맵 인쇄",
+            fetchPrint: "인쇄된 맵 보기",
             landscape: "가로",
             portrait: "세로",
             help: "도움말"

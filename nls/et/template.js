@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Jaga e-maili teel",
             shareViaFacebook: "Jaga läbi Facebook-i",
             shareViaTwitter: "Jaga läbi Twitter-i",
-            print: "Loo kaardi väljatrükk",
-            fetchPrint: "Hangi kaardi väljatrükk",
+            print: "Prindi kaart",
+            fetchPrint: "Vaata prinditud kaarti",
             landscape: "Horisontaalpaigutus",
             portrait: "Vertikaalpaigutus",
             help: "Abi"

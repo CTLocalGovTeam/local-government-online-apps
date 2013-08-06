@@ -78,7 +78,7 @@
             "label": "Show popup for selected feature",
             "fieldName": "highlighter.showFeaturePopup",
             "type": "boolean",
-            "tooltip": "Determines if the popup will automaticallly appear for a feature selected from a search results list"
+            "tooltip": "Determines if the popup will automatically appear for a feature selected from a search results list"
         }, {
             "label": "Zoom level for selected feature",
             "fieldName": "highlighter.highlightZoomLevel",

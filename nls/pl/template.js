@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Udostępnij przez e-mail",
             shareViaFacebook: "Udostępnij przez Facebook",
             shareViaTwitter: "Udostępnij przez Twitter",
-            print: "Utwórz wydruk mapy",
-            fetchPrint: "Pobierz wydruk mapy",
+            print: "Drukuj mapę",
+            fetchPrint: "Wyświetl drukowaną mapę",
             landscape: "Poziomo",
             portrait: "Pionowo",
             help: "Pomoc"

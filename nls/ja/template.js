@@ -26,8 +26,8 @@ define(
             shareViaEmail: "電子メールで共有",
             shareViaFacebook: "Facebook で共有",
             shareViaTwitter: "Twitter で共有",
-            print: "マップ印刷の作成",
-            fetchPrint: "マップ印刷の取得",
+            print: "マップの印刷",
+            fetchPrint: "印刷されたマップの表示",
             landscape: "横",
             portrait: "縦",
             help: "ヘルプ"

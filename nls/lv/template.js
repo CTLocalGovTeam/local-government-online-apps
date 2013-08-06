@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Koplietot caur epastu",
             shareViaFacebook: "Koplietot caur Facebook",
             shareViaTwitter: "Koplietot caur Twitter",
-            print: "Izveidot kartes druku",
-            fetchPrint: "Darbināt kartes druku",
+            print: "Drukāt karti",
+            fetchPrint: "Skatīties kartes druku",
             landscape: "Ainava",
             portrait: "Portrets",
             help: "Palīdzība"
