@@ -14,19 +14,7 @@
  | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  | See the License for the specific language governing permissions and
  | limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
  */
-=======
-*/
->>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
-=======
-*/
->>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
-=======
-*/
->>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
 define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo/dom-style", "dojo/dom-class", "dojo/_base/array", "esri/dijit/editing/TemplatePicker", "esri/dijit/editing/Editor", "dojo/dom-geometry", "dojo/_base/lang", "dojo/query", "dojo/string", "dijit/Tooltip", "esri/geometry/Extent", "esri/geometry/screenUtils", "dojo/aspect", "js/lgonlineBase", "js/lgonlineMap"], function (domConstruct, dom, on, domStyle, domClass, array, TemplatePicker, Editor, domGeom, lang, query, string, Tooltip, Extent, screenUtils, aspect) {
 
     //========================================================================================================================//
@@ -78,19 +66,11 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                     }
                 }));
 
-<<<<<<< HEAD
             }));
             on(this.input, "blur", lang.hitch(this, function () {
                 //hide the tooltip for the input box 
                 Tooltip.hide(this.input);
             }));
-=======
-            }));
-            on(this.input, "blur", lang.hitch(this, function () {
-                //hide the tooltip for the input box 
-                Tooltip.hide(this.input);
-            }));
->>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
             on(this.input, "keydown", lang.hitch(this, function () {
                 //hide the tooltip for the input box
                 Tooltip.hide(this.input);
