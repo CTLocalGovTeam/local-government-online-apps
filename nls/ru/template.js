@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Отправить по электронной почте",
             shareViaFacebook: "Разместить в Facebook",
             shareViaTwitter: "Разместить в Twitter",
-            print: "Создать снимок карты",
-            fetchPrint: "Получить снимок карты",
+            print: "Печать карты",
+            fetchPrint: "Просмотреть снимок карты",
             landscape: "Альбомная",
             portrait: "Книжная",
             help: "Справка"

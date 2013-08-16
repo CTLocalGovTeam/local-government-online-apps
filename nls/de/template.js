@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Per E-Mail freigeben",
             shareViaFacebook: "Über Facebook freigeben",
             shareViaTwitter: "Über Twitter freigeben",
-            print: "Kartendruck erstellen",
-            fetchPrint: "Kartendruck abrufen",
+            print: "Karte drucken",
+            fetchPrint: "Gedruckte Karte anzeigen",
             landscape: "Querformat",
             portrait: "Hochformat",
             help: "Hilfe"

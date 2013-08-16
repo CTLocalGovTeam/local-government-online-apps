@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Partajare prin e-mail",
             shareViaFacebook: "Partajare prin Facebook",
             shareViaTwitter: "Partajare prin Twitter",
-            print: "Creare hartă imprimată",
-            fetchPrint: "Obţinere hartă imprimată",
+            print: "Imprimare dată",
+            fetchPrint: "Vizualizare hartă imprimată",
             landscape: "Peisaj",
             portrait: "Portret",
             help: "Ajutor"

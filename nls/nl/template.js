@@ -26,8 +26,8 @@ define(
             shareViaEmail: "Delen via e-mail",
             shareViaFacebook: "Delen via Facebook",
             shareViaTwitter: "Delen via Twitter",
-            print: "Een kaartafdruk maken",
-            fetchPrint: "De kaartafdruk ophalen",
+            print: "Kaart afdrukken",
+            fetchPrint: "Afgedrukte kaart weergeven",
             landscape: "Liggend",
             portrait: "Staand",
             help: "Help"
