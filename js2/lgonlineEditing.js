@@ -16,7 +16,11 @@
  | limitations under the License.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  */
+=======
+*/
+>>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
 =======
 */
 >>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
@@ -74,11 +78,19 @@ define("js/lgonlineEditing", ["dojo/dom-construct", "dojo/dom", "dojo/on", "dojo
                     }
                 }));
 
+<<<<<<< HEAD
             }));
             on(this.input, "blur", lang.hitch(this, function () {
                 //hide the tooltip for the input box 
                 Tooltip.hide(this.input);
             }));
+=======
+            }));
+            on(this.input, "blur", lang.hitch(this, function () {
+                //hide the tooltip for the input box 
+                Tooltip.hide(this.input);
+            }));
+>>>>>>> e45ddddd0245f27ac5922be89b049e002003a87e
             on(this.input, "keydown", lang.hitch(this, function () {
                 //hide the tooltip for the input box
                 Tooltip.hide(this.input);
